@@ -1,0 +1,29 @@
+name: Check Gradle
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'releases/*'
+
+jobs:
+  test-action:
+    name: GitHub Actions Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Test Local Action
+        id: test-action
+        uses: victor-teles/gradle-properties-diff-checker@v1
+        with:
+          file-name: /gradle.properties
+          property: pluginVersion
+
+      - name: Print Output
+        id: output
+        run: echo "${{ steps.test-action.outputs.changed }}"
